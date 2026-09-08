@@ -1,0 +1,17 @@
+﻿{
+  "tempMaxUrgence": 68.0,
+  "tempMaxThermophile": 62.0,
+  "tempMinThermophile": 55.0,
+  "humiditeMin": 40.0,
+  "humiditeMax": 65.0,
+  "tempFinCycle": 35.0,
+  "dureeBrassagePhase1": 3,
+  "dureeBrassagePhase2": 2,
+  "dureeBrassagePhase3": 2,
+  "intervallePhase1": 2,
+  "intervallePhase2": 6,
+  "intervallePhase3": 24,
+  "tempTransitionP1P2": 55.0,
+  "tempTransitionP2P3": 45.0,
+  "dureeTransitionP2P3": 12
+}

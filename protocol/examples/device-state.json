@@ -1,0 +1,13 @@
+﻿{
+  "type": "device-state",
+  "deviceId": "a0b7c8d9e0f1",
+  "timestamp": 1695000000000,
+  "data": {
+    "temperature": 62.5,
+    "humidity": 48.2,
+    "motor": true,
+    "fan": false,
+    "phase": 2,
+    "emergency": false
+  }
+}

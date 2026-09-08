@@ -1,0 +1,8 @@
+﻿{
+  "type": "command",
+  "deviceId": "a0b7c8d9e0f1",
+  "commandId": "123e4567-e89b-12d3-a456-426614174000",
+  "command": "motor-start",
+  "params": {},
+  "timestamp": 1695000010000
+}

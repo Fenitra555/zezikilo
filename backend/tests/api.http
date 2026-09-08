@@ -1,0 +1,36 @@
+### 1. Health Check
+GET http://localhost:3000/api/health
+
+### 2. Inscription
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "jean.dupont@example.com",
+  "password": "monMotDePasse123",
+  "fullName": "Jean Dupont"
+}
+
+### 3. Connexion
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "jean.dupont@example.com",
+  "password": "monMotDePasse123"
+}
+
+### 4. Liste des appareils (protégé)
+GET http://localhost:3000/api/devices
+Authorization: Bearer VOTRE_TOKEN_ICI
+
+### 5. Ajouter un appareil (protégé)
+POST http://localhost:3000/api/devices
+Authorization: Bearer VOTRE_TOKEN_ICI
+Content-Type: application/json
+
+{
+  "serialNumber": "a0b7c8d9e0f1",
+  "alias": "Composteur Jardin"
+}
+
