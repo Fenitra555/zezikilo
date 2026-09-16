@@ -88,3 +88,89 @@ Authorization: Bearer {{login.response.body.data.token}}
 ### ============================================
 DELETE {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}
 Authorization: Bearer {{login.response.body.data.token}}
+
+### ============================================
+### 10. RECRÉER UN APPAREIL POUR LES MESURES
+### ============================================
+# @name createDeviceForMeasurements
+POST {{baseUrl}}/api/devices
+Authorization: Bearer {{login.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "serialNumber": "b1c2d3e4f5a6",
+  "alias": "Composteur Mesures"
+}
+
+
+### ============================================
+### 11. AJOUTER DES MESURES (pour test)
+### ============================================
+POST {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements
+Authorization: Bearer {{login.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "temperature": 55.5,
+  "humidity": 48.2,
+  "motor": true,
+  "fan": false,
+  "phase": 1,
+  "emergency": false
+}
+
+### ============================================
+### 12. AJOUTER UNE DEUXIÈME MESURE
+### ============================================
+POST {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements
+Authorization: Bearer {{login.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "temperature": 58.3,
+  "humidity": 50.1,
+  "motor": true,
+  "fan": false,
+  "phase": 1,
+  "emergency": false
+}
+
+### ============================================
+### 13. AJOUTER UNE TROISIÈME MESURE
+### ============================================
+POST {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements
+Authorization: Bearer {{login.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "temperature": 61.0,
+  "humidity": 52.0,
+  "motor": true,
+  "fan": true,
+  "phase": 2,
+  "emergency": false
+}
+
+### ============================================
+### 14. HISTORIQUE COMPLET (les 3 mesures)
+### ============================================
+GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements
+Authorization: Bearer {{login.response.body.data.token}}
+
+### ============================================
+### 15. HISTORIQUE AVEC LIMITE (2 mesures)
+### ============================================
+GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements?limit=2&offset=0
+Authorization: Bearer {{login.response.body.data.token}}
+
+### ============================================
+### 16. HISTORIQUE AVEC PAGINATION (page 2)
+### ============================================
+GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements?limit=2&offset=2
+Authorization: Bearer {{login.response.body.data.token}}
+
+### ============================================
+### 17. HISTORIQUE FILTRÉ PAR DATE
+### ============================================
+GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements?startDate=0
+Authorization: Bearer {{login.response.body.data.token}}
