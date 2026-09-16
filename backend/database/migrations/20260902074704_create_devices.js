@@ -7,7 +7,8 @@ exports.up = function(knex) {
     table.string('apiKey').unique().notNullable();
     table.timestamp('lastSyncAt');
     table.string('firmwareVersion').defaultTo('1.0.0');
-    table.timestamps(true, true);
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
 };
 

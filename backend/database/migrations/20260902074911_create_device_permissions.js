@@ -4,7 +4,8 @@ exports.up = function(knex) {
     table.uuid('deviceId').references('id').inTable('devices').onDelete('CASCADE');
     table.uuid('userId').references('id').inTable('users').onDelete('CASCADE');
     table.enum('permission', ['read', 'write', 'admin']).defaultTo('read');
-    table.timestamps(true, true);
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
 };
 

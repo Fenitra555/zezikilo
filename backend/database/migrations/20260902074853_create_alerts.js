@@ -7,7 +7,8 @@ exports.up = function(knex) {
     table.boolean('acknowledged').defaultTo(false);
     table.uuid('acknowledgedBy').references('id').inTable('users').onDelete('SET NULL');
     table.bigInteger('timestamp').notNullable();
-    table.timestamps(true, true);
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
 };
 

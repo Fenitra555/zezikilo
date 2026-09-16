@@ -9,7 +9,8 @@ exports.up = function(knex) {
     table.text('result');
     table.timestamp('sentAt');
     table.timestamp('acknowledgedAt');
-    table.timestamps(true, true);
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
 };
 

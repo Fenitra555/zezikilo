@@ -10,7 +10,8 @@ exports.up = function(knex) {
     table.boolean('emergency').defaultTo(false);
     table.bigInteger('timestamp').notNullable();
     table.string('syncId');
-    table.timestamps(true, true);
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
 };
 

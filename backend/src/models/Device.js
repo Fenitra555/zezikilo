@@ -30,7 +30,7 @@ class Device {
   }
 
   /**
-   * Récupérer tous les appareils d’un utilisateur (avec permissions)
+   * Récupérer tous les appareils d'un utilisateur (avec permissions)
    * @param {string} userId
    * @returns {Promise<Array>}
    */
@@ -48,24 +48,37 @@ class Device {
    * @returns {Promise<Object>}
    */
   static async create(data) {
+    const id = crypto.randomUUID();
     const apiKey = this.generateApiKey();
+
     const [device] = await db('devices')
       .insert({
+        id,
         serialNumber: data.serialNumber,
         alias: data.alias || data.serialNumber,
         ownerId: data.ownerId,
         apiKey: apiKey,
         firmwareVersion: '1.0.0'
       })
-      .returning(['id', 'serialNumber', 'alias', 'ownerId', 'apiKey', 'firmwareVersion', 'createdAt']);
+      .returning([
+        'id',
+        'serialNumber',
+        'alias',
+        'ownerId',
+        'apiKey',
+        'firmwareVersion',
+        'createdAt'
+      ]);
 
     // Créer automatiquement les paramètres par défaut
     await db('device_settings').insert({
+      id: crypto.randomUUID(),
       deviceId: device.id
     });
 
-    // Donner la permission admin à l’utilisateur propriétaire
+    // Donner la permission admin à l'utilisateur propriétaire
     await db('device_permissions').insert({
+      id: crypto.randomUUID(),
       deviceId: device.id,
       userId: data.ownerId,
       permission: 'admin'
@@ -99,4 +112,3 @@ class Device {
 }
 
 module.exports = Device;
-

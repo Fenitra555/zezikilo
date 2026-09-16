@@ -17,7 +17,8 @@ exports.up = function(knex) {
     table.float('tempTransitionP1P2').defaultTo(55.0);
     table.float('tempTransitionP2P3').defaultTo(45.0);
     table.integer('dureeTransitionP2P3').defaultTo(12);
-    table.timestamps(true, true);
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
 };
 

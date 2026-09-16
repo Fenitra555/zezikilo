@@ -1,18 +1,33 @@
-### 1. Health Check
-GET http://localhost:3000/api/health
+### ============================================
+### VARIABLES GLOBALES
+### ============================================
+@baseUrl = http://localhost:3000
 
-### 2. Inscription
-POST http://localhost:3000/api/auth/register
+
+### ============================================
+### 1. HEALTH CHECK
+### ============================================
+GET {{baseUrl}}/api/health
+
+
+### ============================================
+### 2. INSCRIPTION (à exécuter une seule fois)
+### ============================================
+POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
-  "email": "jean.dupont@example.com",
+  "email": "george.dupont@example.com",
   "password": "monMotDePasse123",
-  "fullName": "Jean Dupont"
+  "fullName": "George Dupont"
 }
 
-### 3. Connexion
-POST http://localhost:3000/api/auth/login
+
+### ============================================
+### 3. CONNEXION - Capture automatique du token
+### ============================================
+# @name login
+POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
@@ -20,13 +35,20 @@ Content-Type: application/json
   "password": "monMotDePasse123"
 }
 
-### 4. Liste des appareils (protégé)
-GET http://localhost:3000/api/devices
-Authorization: Bearer VOTRE_TOKEN_ICI
 
-### 5. Ajouter un appareil (protégé)
-POST http://localhost:3000/api/devices
-Authorization: Bearer VOTRE_TOKEN_ICI
+### ============================================
+### 4. LISTE DES APPAREILS (utilise le token capturé)
+### ============================================
+GET {{baseUrl}}/api/devices
+Authorization: Bearer {{login.response.body.data.token}}
+
+
+### ============================================
+### 5. AJOUTER UN APPAREIL - Capture automatique du deviceId
+### ============================================
+# @name createDevice
+POST {{baseUrl}}/api/devices
+Authorization: Bearer {{login.response.body.data.token}}
 Content-Type: application/json
 
 {
@@ -34,3 +56,35 @@ Content-Type: application/json
   "alias": "Composteur Jardin"
 }
 
+
+### ============================================
+### 6. DÉTAIL D'UN APPAREIL (utilise le deviceId capturé)
+### ============================================
+GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}
+Authorization: Bearer {{login.response.body.data.token}}
+
+
+### ============================================
+### 7. MODIFIER L'ALIAS D'UN APPAREIL
+### ============================================
+PUT {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}
+Authorization: Bearer {{login.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "alias": "Composteur Potager"
+}
+
+
+### ============================================
+### 8. VÉRIFIER LA MODIFICATION
+### ============================================
+GET {{baseUrl}}/api/devices
+Authorization: Bearer {{login.response.body.data.token}}
+
+
+### ============================================
+### 9. SUPPRIMER L'APPAREIL
+### ============================================
+DELETE {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}
+Authorization: Bearer {{login.response.body.data.token}}

@@ -2,11 +2,11 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-require('dotenv').config(); // IMPORTANT : charge les variables .env
+require('dotenv').config();
 
 // Import des routes
 const authRoutes = require('./api/auth.routes');
-const deviceRoutes = require('./api/devices.routes');
+const deviceRoutes = require('./api/devices.routes');   // <-- vérifier cette ligne
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,18 +16,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Servir les fichiers statiques
+// Fichiers statiques
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Routes de l'API
+// Routes
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-app.use('/api/auth', authRoutes);      // <-- Route d'authentification
-app.use('/api/devices', deviceRoutes); // <-- Route protégée
+app.use('/api/auth', authRoutes);
+app.use('/api/devices', deviceRoutes);                   // <-- vérifier cette ligne
 
-// Middleware de gestion d'erreurs (très important pour capturer les erreurs)
+// Gestion d'erreurs
 app.use((err, req, res, next) => {
   console.error('❌ Erreur:', err.message);
   res.status(err.status || 500).json({
@@ -36,9 +36,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Démarrer le serveur
 app.listen(PORT, () => {
   console.log(`🚀 Serveur backend démarré sur http://localhost:${PORT}`);
-  console.log(`📡 Health check: http://localhost:${PORT}/api/health`);
 });
-
