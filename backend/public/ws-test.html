@@ -5,8 +5,8 @@
     <title>Test WebSocket Zezik'Ilo</title>
     <style>
         body { font-family: sans-serif; max-width: 700px; margin: 2rem auto; }
-        textarea { width: 100%; height: 100px; }
-        button { padding: 0.5rem 1rem; margin: 0.5rem 0; }
+        textarea, input { width: 100%; padding: 0.5rem; font-family: monospace; }
+        button { padding: 0.5rem 1rem; margin: 0.5rem 0.25rem 0.5rem 0; }
         #log {
             background: #1e1e1e;
             color: #0f0;
@@ -18,16 +18,26 @@
             border-radius: 0.25rem;
             white-space: pre-wrap;
         }
+        .field { margin-bottom: 1rem; }
     </style>
 </head>
 <body>
     <h1>Test WebSocket – Zezik'Ilo</h1>
 
-    <p><strong>1.</strong> Collez le token JWT obtenu via <code>/api/auth/login</code> :</p>
-    <textarea id="token" placeholder="eyJhbGciOi..."></textarea>
+    <div class="field">
+        <label><strong>1.</strong> Token JWT :</label>
+        <textarea id="token" rows="3" placeholder="eyJhbGciOi..."></textarea>
+    </div>
+
+    <div class="field">
+        <label><strong>2.</strong> ID de l'appareil (deviceId) :</label>
+        <input id="deviceId" placeholder="ex : dcd28d19-3dea-4293-83f2-63c076625e53">
+    </div>
 
     <button id="connect">Se connecter</button>
     <button id="disconnect">Se déconnecter</button>
+    <button id="subscribe">S'abonner à l'appareil</button>
+    <button id="unsubscribe">Se désabonner</button>
 
     <h2>Logs</h2>
     <div id="log"></div>
@@ -48,13 +58,30 @@
             if (!token) { log('❌ Token requis'); return; }
 
             log('Connexion en cours...');
-            socket = io({
-                auth: { token }
-            });
+            socket = io({ auth: { token } });
 
             socket.on('connect', () => log(`✅ Connecté (id=${socket.id})`));
             socket.on('disconnect', (reason) => log(`❌ Déconnecté : ${reason}`));
             socket.on('connect_error', (err) => log(`💥 Erreur : ${err.message}`));
+
+            socket.on('subscribed', ({ deviceId }) => log(`📥 Abonné à l'appareil ${deviceId}`));
+            socket.on('error', ({ message }) => log(`⚠️ Erreur serveur : ${message}`));
+        });
+
+        document.getElementById('subscribe').addEventListener('click', () => {
+            if (!socket) { log('❌ Connectez-vous d\'abord'); return; }
+            const deviceId = document.getElementById('deviceId').value.trim();
+            if (!deviceId) { log('❌ deviceId requis'); return; }
+            socket.emit('subscribe', { deviceId });
+            log(`→ Demande d'abonnement à ${deviceId}`);
+        });
+
+        document.getElementById('unsubscribe').addEventListener('click', () => {
+            if (!socket) { log('❌ Connectez-vous d\'abord'); return; }
+            const deviceId = document.getElementById('deviceId').value.trim();
+            if (!deviceId) return;
+            socket.emit('unsubscribe', { deviceId });
+            log(`→ Désabonnement de ${deviceId}`);
         });
 
         document.getElementById('disconnect').addEventListener('click', () => {
