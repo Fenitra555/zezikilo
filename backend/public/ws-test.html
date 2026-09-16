@@ -32,7 +32,12 @@
     <button id="disconnect">Se déconnecter</button>
     <button id="subscribe">S'abonner à l'appareil</button>
     <button id="unsubscribe">Se désabonner</button>
-    <button id="simulateState">Simuler un device-state</button>
+
+    <h2>Commandes</h2>
+    <button id="cmdMotorStart">Démarrer moteur</button>
+    <button id="cmdMotorStop">Arrêter moteur</button>
+    <button id="cmdFanStart">Démarrer ventilateur</button>
+    <button id="cmdFanStop">Arrêter ventilateur</button>
 
     <h2>Logs</h2>
     <div id="log"></div>
@@ -61,9 +66,16 @@
             socket.on('subscribed', ({ deviceId }) => log(`📥 Abonné à l'appareil ${deviceId}`));
             socket.on('error', ({ message }) => log(`⚠️ Erreur serveur : ${message}`));
 
-            // Réception des device-state diffusés
             socket.on('device-state', (payload) => {
                 log(`📊 device-state reçu : T=${payload.data.temperature.toFixed(1)}°C, H=${payload.data.humidity.toFixed(1)}%`);
+            });
+
+            socket.on('command-sent', ({ commandId, command }) => {
+                log(`📤 Commande envoyée : ${command} (id=${commandId})`);
+            });
+
+            socket.on('command-ack', ({ commandId, status }) => {
+                log(`✅ Commande acquittée : ${commandId} (status=${status})`);
             });
         });
 
@@ -83,33 +95,28 @@
             log(`→ Désabonnement de ${deviceId}`);
         });
 
-        document.getElementById('simulateState').addEventListener('click', () => {
+        function sendCommand(command) {
             if (!socket) { log('❌ Connectez-vous d\'abord'); return; }
             const deviceId = document.getElementById('deviceId').value.trim();
             if (!deviceId) { log('❌ deviceId requis'); return; }
 
-            socket.emit('device-state', {
-                type: 'device-state',
+            socket.emit('command', {
+                type: 'command',
                 deviceId,
-                timestamp: Date.now(),
-                data: {
-                    temperature: 55 + Math.random() * 10,
-                    humidity: 45 + Math.random() * 10,
-                    motor: true,
-                    fan: false,
-                    phase: 1,
-                    emergency: false
-                }
+                command,
+                params: {},
+                timestamp: Date.now()
             });
-            log('→ device-state simulé envoyé');
-        });
+            log(`→ Envoi commande : ${command}`);
+        }
+
+        document.getElementById('cmdMotorStart').addEventListener('click', () => sendCommand('motor-start'));
+        document.getElementById('cmdMotorStop').addEventListener('click', () => sendCommand('motor-stop'));
+        document.getElementById('cmdFanStart').addEventListener('click', () => sendCommand('fan-start'));
+        document.getElementById('cmdFanStop').addEventListener('click', () => sendCommand('fan-stop'));
 
         document.getElementById('disconnect').addEventListener('click', () => {
-            if (socket) {
-                socket.disconnect();
-                socket = null;
-                log('Déconnexion manuelle');
-            }
+            if (socket) { socket.disconnect(); socket = null; log('Déconnexion manuelle'); }
         });
     </script>
 </body>

@@ -53,14 +53,33 @@
             if (!serialNumber || !apiKey) { log('❌ Champs requis'); return; }
 
             log('Connexion en tant qu\'ESP32...');
-            socket = io({
-                auth: { serialNumber, apiKey }
+            socket = io({ auth: { serialNumber, apiKey } });
+
+            socket.on('connect', () => {
+                log(`✅ Connecté comme ESP32 (id=${socket.id})`);
             });
 
-            socket.on('connect', () => log(`✅ Connecté comme ESP32 (id=${socket.id})`));
             socket.on('disconnect', (reason) => log(`❌ Déconnecté : ${reason}`));
             socket.on('connect_error', (err) => log(`💥 Erreur : ${err.message}`));
             socket.on('error', ({ message }) => log(`⚠️ Erreur serveur : ${message}`));
+
+            // Réception des commandes envoyées par le frontend
+            socket.on('command', (payload) => {
+                log(`📥 Commande reçue : ${payload.command} (id=${payload.commandId})`);
+
+                // Simuler l'exécution puis acquitter
+                setTimeout(() => {
+                    socket.emit('command-ack', {
+                        type: 'command-ack',
+                        deviceId: payload.deviceId,
+                        commandId: payload.commandId,
+                        status: 'success',
+                        result: `Commande ${payload.command} exécutée`,
+                        timestamp: Date.now()
+                    });
+                    log(`📤 Accusé envoyé pour ${payload.commandId}`);
+                }, 500);
+            });
         });
 
         document.getElementById('sendState').addEventListener('click', () => {
