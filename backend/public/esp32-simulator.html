@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulateur ESP32 – Zezik'Ilo</title>
+    <style>
+        body { font-family: sans-serif; max-width: 700px; margin: 2rem auto; }
+        input { width: 100%; padding: 0.5rem; font-family: monospace; }
+        button { padding: 0.5rem 1rem; margin: 0.5rem 0.25rem 0.5rem 0; }
+        #log {
+            background: #1e1e1e; color: #0f0; font-family: monospace;
+            font-size: 0.85rem; padding: 1rem; height: 300px;
+            overflow-y: auto; border-radius: 0.25rem; white-space: pre-wrap;
+        }
+        .field { margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <h1>Simulateur ESP32 – Zezik'Ilo</h1>
+    <p>Ce client s'authentifie comme un <strong>appareil</strong>, pas comme un utilisateur.</p>
+
+    <div class="field">
+        <label><strong>1.</strong> Serial Number (12 caractères hex) :</label>
+        <input id="serialNumber" value="b1c2d3e4f5a6">
+    </div>
+
+    <div class="field">
+        <label><strong>2.</strong> API Key :</label>
+        <input id="apiKey" value="sk_96b20bec9c9030862270d9499eab7eee8d9f7580e21e41ce7b1c0f746b993c2c">
+    </div>
+
+    <button id="connect">Se connecter (comme ESP32)</button>
+    <button id="disconnect">Se déconnecter</button>
+    <button id="sendState">Envoyer un device-state</button>
+
+    <h2>Logs</h2>
+    <div id="log"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = null;
+        const logEl = document.getElementById('log');
+
+        function log(msg) {
+            const time = new Date().toLocaleTimeString();
+            logEl.textContent += `[${time}] ${msg}\n`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        document.getElementById('connect').addEventListener('click', () => {
+            const serialNumber = document.getElementById('serialNumber').value.trim();
+            const apiKey = document.getElementById('apiKey').value.trim();
+            if (!serialNumber || !apiKey) { log('❌ Champs requis'); return; }
+
+            log('Connexion en tant qu\'ESP32...');
+            socket = io({
+                auth: { serialNumber, apiKey }
+            });
+
+            socket.on('connect', () => log(`✅ Connecté comme ESP32 (id=${socket.id})`));
+            socket.on('disconnect', (reason) => log(`❌ Déconnecté : ${reason}`));
+            socket.on('connect_error', (err) => log(`💥 Erreur : ${err.message}`));
+            socket.on('error', ({ message }) => log(`⚠️ Erreur serveur : ${message}`));
+        });
+
+        document.getElementById('sendState').addEventListener('click', () => {
+            if (!socket) { log('❌ Connectez-vous d\'abord'); return; }
+            const serialNumber = document.getElementById('serialNumber').value.trim();
+
+            const payload = {
+                type: 'device-state',
+                deviceId: serialNumber,
+                timestamp: Date.now(),
+                data: {
+                    temperature: 55 + Math.random() * 10,
+                    humidity: 45 + Math.random() * 10,
+                    motor: true,
+                    fan: false,
+                    phase: 1,
+                    emergency: false
+                }
+            };
+
+            socket.emit('device-state', payload);
+            log(`→ device-state envoyé : T=${payload.data.temperature.toFixed(1)}°C`);
+        });
+
+        document.getElementById('disconnect').addEventListener('click', () => {
+            if (socket) { socket.disconnect(); socket = null; log('Déconnexion manuelle'); }
+        });
+    </script>
+</body>
+</html>

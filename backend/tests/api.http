@@ -199,3 +199,7 @@ Content-Type: application/json
 ### ============================================
 GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/settings
 Authorization: Bearer {{login.response.body.data.token}}
+
+### Tests
+GET http://localhost:3000/api/devices/dcd28d19-3dea-4293-83f2-63c076625e53/measurements
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE1MGYyN2Y3LWE4ODYtNDFiOS05ZTQ0LWU2Y2EyZjc5Zjg3NCIsImVtYWlsIjoiamVhbi5kdXBvbnRAZXhhbXBsZS5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTc4OTU0MjA0MywiZXhwIjoxNzkwMTQ2ODQzfQ.N2OePOkBBkfhkxyPqsTYViSBEznfPYetPz56AhtwYJo
