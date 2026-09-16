@@ -174,3 +174,28 @@ Authorization: Bearer {{login.response.body.data.token}}
 ### ============================================
 GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements?startDate=0
 Authorization: Bearer {{login.response.body.data.token}}
+
+### ============================================
+### 18. RÉCUPÉRER LES PARAMÈTRES PAR DÉFAUT
+### ============================================
+GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/settings
+Authorization: Bearer {{login.response.body.data.token}}
+
+### ============================================
+### 19. METTRE À JOUR LES PARAMÈTRES
+### ============================================
+PUT {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/settings
+Authorization: Bearer {{login.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "tempMaxUrgence": 70.0,
+  "humiditeMin": 35.0,
+  "dureeBrassagePhase1": 4
+}
+
+### ============================================
+### 20. VÉRIFIER LA MISE À JOUR
+### ============================================
+GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/settings
+Authorization: Bearer {{login.response.body.data.token}}

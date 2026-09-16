@@ -8,6 +8,7 @@ require('dotenv').config();
 const authRoutes = require('./api/auth.routes');
 const deviceRoutes = require('./api/devices.routes');   // <-- vérifier cette ligne
 const measurementRoutes = require('./api/measurements.routes');
+const settingsRoutes = require('./api/settings.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,6 +29,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/devices', deviceRoutes);                   // <-- vérifier cette ligne
 app.use('/api/devices/:deviceId/measurements', measurementRoutes);
+app.use('/api/devices/:deviceId/settings', settingsRoutes);
 
 // Gestion d'erreurs
 app.use((err, req, res, next) => {
