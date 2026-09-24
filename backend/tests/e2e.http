@@ -1,0 +1,73 @@
+### ============================================
+### TEST E2E : CIRCUIT COMPLET
+### ============================================
+@baseUrl = http://localhost:3000
+
+### 1. Health check
+GET {{baseUrl}}/api/health
+
+### 2. Register Alice
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "aliceMotDePasse",
+  "fullName": "Alice Test"
+}
+
+### 3. Login Alice
+# @name loginAlice
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "aliceMotDePasse"
+}
+
+### 4. Alice crée un composteur
+# @name aliceDevice
+POST {{baseUrl}}/api/devices
+Authorization: Bearer {{loginAlice.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "serialNumber": "deadbeef1234",
+  "alias": "Mon Composteur"
+}
+
+### 5. Alice envoie 3 mesures
+POST {{baseUrl}}/api/devices/{{aliceDevice.response.body.data.id}}/measurements
+Authorization: Bearer {{loginAlice.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "temperature": 52.0,
+  "humidity": 47.0,
+  "motor": true,
+  "fan": false,
+  "phase": 1,
+  "emergency": false
+}
+
+### 6. Alice consulte l'historique
+GET {{baseUrl}}/api/devices/{{aliceDevice.response.body.data.id}}/measurements
+Authorization: Bearer {{loginAlice.response.body.data.token}}
+
+### 7. Alice modifie les paramètres
+PUT {{baseUrl}}/api/devices/{{aliceDevice.response.body.data.id}}/settings
+Authorization: Bearer {{loginAlice.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "tempMaxUrgence": 72.0
+}
+
+### 8. Alice vérifie les paramètres
+GET {{baseUrl}}/api/devices/{{aliceDevice.response.body.data.id}}/settings
+Authorization: Bearer {{loginAlice.response.body.data.token}}
+
+### 9. Alice supprime son appareil
+DELETE {{baseUrl}}/api/devices/{{aliceDevice.response.body.data.id}}
+Authorization: Bearer {{loginAlice.response.body.data.token}}
