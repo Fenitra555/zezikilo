@@ -13,8 +13,9 @@ const settingsRoutes = require('./api/settings.routes');
 const alertRoutes = require('./api/alerts.routes');
 const permissionRoutes = require('./api/permissions.routes');
 
-// Import WebSocket
+// Import WebSocket et errorHandler
 const initWebSocket = require('./ws');
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -42,14 +43,15 @@ app.use('/api/devices/:deviceId/measurements', measurementRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/devices', deviceRoutes);
 
-// Middleware de gestion d'erreurs
-app.use((err, req, res, next) => {
-  console.error('❌ Erreur:', err.message);
-  res.status(err.status || 500).json({
-    status: 'error',
-    message: err.message || 'Erreur interne du serveur'
-  });
+// Middleware 404 (routes non trouvées)
+app.use((req, res, next) => {
+  const error = new Error(`Route non trouvée : ${req.method} ${req.path}`);
+  error.status = 404;
+  next(error);
 });
+
+// Middleware d'erreurs (DOIT être en dernier)
+app.use(errorHandler);
 
 // Créer le serveur HTTP
 const server = http.createServer(app);

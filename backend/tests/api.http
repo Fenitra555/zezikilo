@@ -5,14 +5,14 @@
 
 
 ### ============================================
-### 1. HEALTH CHECK
+### PARTIE 1 : SETUP INITIAL
 ### ============================================
+
+### 1. HEALTH CHECK
 GET {{baseUrl}}/api/health
 
 
-### ============================================
-### 2. INSCRIPTION JEAN
-### ============================================
+### 2. INSCRIPTION JEAN (une seule fois)
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
@@ -23,9 +23,7 @@ Content-Type: application/json
 }
 
 
-### ============================================
 ### 3. LOGIN JEAN
-### ============================================
 # @name login
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
@@ -36,9 +34,7 @@ Content-Type: application/json
 }
 
 
-### ============================================
 ### 4. CREER APPAREIL COMPOSTEUR
-### ============================================
 # @name createDevice
 POST {{baseUrl}}/api/devices
 Authorization: Bearer {{login.response.body.data.token}}
@@ -50,9 +46,8 @@ Content-Type: application/json
 }
 
 
-### ============================================
-### 5. INSCRIPTION MARIE
-### ============================================
+### 5. INSCRIPTION MARIE (une seule fois)
+# @name registerMarie
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
@@ -64,15 +59,15 @@ Content-Type: application/json
 
 
 ### ============================================
-### 6. LISTER LES PERMISSIONS (vide au départ)
+### PARTIE 2 : TESTS PERMISSIONS
 ### ============================================
+
+### 6. LISTER LES PERMISSIONS (Jean admin)
 GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions
 Authorization: Bearer {{login.response.body.data.token}}
 
 
-### ============================================
 ### 7. PARTAGER AVEC MARIE (read)
-### ============================================
 POST {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions
 Authorization: Bearer {{login.response.body.data.token}}
 Content-Type: application/json
@@ -83,16 +78,12 @@ Content-Type: application/json
 }
 
 
-### ============================================
-### 8. VERIFIER
-### ============================================
+### 8. VERIFIER (2 permissions)
 GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions
 Authorization: Bearer {{login.response.body.data.token}}
 
 
-### ============================================
 ### 9. LOGIN MARIE
-### ============================================
 # @name loginMarie
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
@@ -103,18 +94,13 @@ Content-Type: application/json
 }
 
 
-### ============================================
-### 10. APPAREILS DE MARIE (doit voir le partagé)
-### ============================================
+### 10. APPAREILS DE MARIE (voit le partagé)
 GET {{baseUrl}}/api/devices
 Authorization: Bearer {{loginMarie.response.body.data.token}}
 
 
-### ============================================
 ### 11. MODIFIER PERMISSION MARIE (read -> write)
-### ============================================
-### Remplacer USER_ID par l'ID de Marie (visible en requête 8)
-PUT {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions/21ef1c69-2067-4ab7-a41a-6c9a0f3085f8
+PUT {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions/{{loginMarie.response.body.data.user.id}}
 Authorization: Bearer {{login.response.body.data.token}}
 Content-Type: application/json
 
@@ -122,15 +108,95 @@ Content-Type: application/json
   "permission": "write"
 }
 
-### ============================================
+
 ### 12. REVOQUER ACCES MARIE
-### ============================================
-### Remplacer USER_ID par l'ID de Marie
-DELETE {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions/21ef1c69-2067-4ab7-a41a-6c9a0f3085f8
+DELETE {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions/{{loginMarie.response.body.data.user.id}}
 Authorization: Bearer {{login.response.body.data.token}}
 
-### ============================================
-### 13. VERIFIER (liste vide)
-### ============================================
+
+### 13. VERIFIER (Jean seul reste)
 GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions
 Authorization: Bearer {{login.response.body.data.token}}
+
+
+### ============================================
+### PARTIE 3 : TESTS GESTION D'ERREURS
+### ============================================
+
+### 14. ROUTE INEXISTANTE (404)
+GET {{baseUrl}}/api/route-qui-nexiste-pas
+
+
+### 15. TOKEN MANQUANT (401)
+GET {{baseUrl}}/api/devices
+
+
+### 16. TOKEN MAL FORMATÉ (401)
+GET {{baseUrl}}/api/devices
+Authorization: token_bidon_sans_bearer
+
+
+### 17. TOKEN INVALIDE (401)
+GET {{baseUrl}}/api/devices
+Authorization: Bearer ceci_est_un_faux_token
+
+
+### 18. APPAREIL INEXISTANT (404)
+GET {{baseUrl}}/api/devices/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{login.response.body.data.token}}
+
+
+### 19. MARIE TENTE D'ACCÉDER À L'APPAREIL DE JEAN (403)
+GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}
+Authorization: Bearer {{loginMarie.response.body.data.token}}
+
+
+### 20. EMAIL DÉJÀ UTILISÉ (400)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "jean.dupont@example.com",
+  "password": "autremotdepasse",
+  "fullName": "Jean Bis"
+}
+
+
+### 21. CHAMPS MANQUANTS - REGISTER (400)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "sanspassword@example.com"
+}
+
+
+### 22. IDENTIFIANTS INVALIDES - LOGIN (401)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "jean.dupont@example.com",
+  "password": "mauvaisMotDePasse"
+}
+
+
+### 23. SERIAL NUMBER MANQUANT (400)
+POST {{baseUrl}}/api/devices
+Authorization: Bearer {{login.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "alias": "Sans Serial"
+}
+
+
+### 24. APPAREIL DÉJÀ ASSOCIÉ (400)
+POST {{baseUrl}}/api/devices
+Authorization: Bearer {{login.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "serialNumber": "a0b7c8d9e0f1",
+  "alias": "Doublon"
+}
