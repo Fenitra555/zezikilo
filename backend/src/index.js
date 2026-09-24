@@ -32,11 +32,14 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-app.use('/api/auth', authRoutes);
+// Routes spécifiques (avec :deviceId) AVANT les routes génériques
 app.use('/api/devices/:deviceId/permissions', permissionRoutes);
 app.use('/api/devices/:deviceId/alerts', alertRoutes);
 app.use('/api/devices/:deviceId/settings', settingsRoutes);
 app.use('/api/devices/:deviceId/measurements', measurementRoutes);
+
+// Routes génériques
+app.use('/api/auth', authRoutes);
 app.use('/api/devices', deviceRoutes);
 
 // Middleware de gestion d'erreurs

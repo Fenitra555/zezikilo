@@ -32,6 +32,7 @@
     <button id="connect">Se connecter (comme ESP32)</button>
     <button id="disconnect">Se déconnecter</button>
     <button id="sendState">Envoyer un device-state</button>
+    <button id="sendAlert">Envoyer une alerte</button>
 
     <h2>Logs</h2>
     <div id="log"></div>
@@ -67,7 +68,6 @@
             socket.on('command', (payload) => {
                 log(`📥 Commande reçue : ${payload.command} (id=${payload.commandId})`);
 
-                // Simuler l'exécution puis acquitter
                 setTimeout(() => {
                     socket.emit('command-ack', {
                         type: 'command-ack',
@@ -102,6 +102,20 @@
 
             socket.emit('device-state', payload);
             log(`→ device-state envoyé : T=${payload.data.temperature.toFixed(1)}°C`);
+        });
+
+        document.getElementById('sendAlert').addEventListener('click', () => {
+            if (!socket) { log('❌ Connectez-vous d\'abord'); return; }
+            const serialNumber = document.getElementById('serialNumber').value.trim();
+
+            socket.emit('alert', {
+                type: 'alert',
+                deviceId: serialNumber,
+                severity: 'critical',
+                message: 'Température > 68°C, refroidissement d\'urgence',
+                timestamp: Date.now()
+            });
+            log('🚨 Alerte envoyée');
         });
 
         document.getElementById('disconnect').addEventListener('click', () => {

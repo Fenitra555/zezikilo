@@ -220,6 +220,49 @@ async function handleCommandAck(io, socket, payload) {
 }
 
 /**
+ * Traite une alerte envoyée par l'ESP32
+ */
+async function handleAlert(io, socket, payload) {
+  if (socket.clientType !== 'device') {
+    return socket.emit('error', { message: 'Réservé aux appareils' });
+  }
+
+  const { severity, message, timestamp } = payload;
+
+  if (!severity || !message) {
+    return socket.emit('error', { message: 'severity et message requis' });
+  }
+
+  try {
+    const alert = {
+      id: crypto.randomUUID(),
+      deviceId: socket.device.id,
+      type: severity,
+      message,
+      acknowledged: false,
+      timestamp: timestamp || Date.now()
+    };
+
+    await db('alerts').insert(alert);
+
+    const room = `device:${socket.device.id}`;
+    io.to(room).emit('alert', {
+      type: 'alert',
+      deviceId: socket.device.id,
+      serialNumber: socket.device.serialNumber,
+      severity,
+      message,
+      timestamp: alert.timestamp
+    });
+
+    console.log(`🚨 Alerte diffusée (device=${socket.device.serialNumber}, severity=${severity})`);
+  } catch (err) {
+    console.error('❌ Erreur alert :', err.message);
+    socket.emit('error', { message: 'Erreur lors du traitement de l\'alerte' });
+  }
+}
+
+/**
  * Initialise le serveur WebSocket
  */
 function initWebSocket(httpServer) {
@@ -282,6 +325,10 @@ function initWebSocket(httpServer) {
 
     socket.on('command-ack', (payload) => {
       handleCommandAck(io, socket, payload);
+    });
+
+    socket.on('alert', (payload) => {
+      handleAlert(io, socket, payload);
     });
 
     // ---- Déconnexion ----
