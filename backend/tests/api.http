@@ -11,20 +11,20 @@ GET {{baseUrl}}/api/health
 
 
 ### ============================================
-### 2. INSCRIPTION (à exécuter une seule fois)
+### 2. INSCRIPTION JEAN
 ### ============================================
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
-  "email": "george.dupont@example.com",
+  "email": "jean.dupont@example.com",
   "password": "monMotDePasse123",
-  "fullName": "George Dupont"
+  "fullName": "Jean Dupont"
 }
 
 
 ### ============================================
-### 3. CONNEXION - Capture automatique du token
+### 3. LOGIN JEAN
 ### ============================================
 # @name login
 POST {{baseUrl}}/api/auth/login
@@ -37,14 +37,7 @@ Content-Type: application/json
 
 
 ### ============================================
-### 4. LISTE DES APPAREILS (utilise le token capturé)
-### ============================================
-GET {{baseUrl}}/api/devices
-Authorization: Bearer {{login.response.body.data.token}}
-
-
-### ============================================
-### 5. AJOUTER UN APPAREIL - Capture automatique du deviceId
+### 4. CREER APPAREIL COMPOSTEUR
 ### ============================================
 # @name createDevice
 POST {{baseUrl}}/api/devices
@@ -58,174 +51,86 @@ Content-Type: application/json
 
 
 ### ============================================
-### 6. DÉTAIL D'UN APPAREIL (utilise le deviceId capturé)
+### 5. INSCRIPTION MARIE
 ### ============================================
-GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}
-Authorization: Bearer {{login.response.body.data.token}}
-
-
-### ============================================
-### 7. MODIFIER L'ALIAS D'UN APPAREIL
-### ============================================
-PUT {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}
-Authorization: Bearer {{login.response.body.data.token}}
+POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
-  "alias": "Composteur Potager"
+  "email": "marie.dupont@example.com",
+  "password": "monMotDePasse456",
+  "fullName": "Marie Dupont"
 }
 
 
 ### ============================================
-### 8. VÉRIFIER LA MODIFICATION
+### 6. LISTER LES PERMISSIONS (vide au départ)
+### ============================================
+GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions
+Authorization: Bearer {{login.response.body.data.token}}
+
+
+### ============================================
+### 7. PARTAGER AVEC MARIE (read)
+### ============================================
+POST {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions
+Authorization: Bearer {{login.response.body.data.token}}
+Content-Type: application/json
+
+{
+  "email": "marie.dupont@example.com",
+  "permission": "read"
+}
+
+
+### ============================================
+### 8. VERIFIER
+### ============================================
+GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions
+Authorization: Bearer {{login.response.body.data.token}}
+
+
+### ============================================
+### 9. LOGIN MARIE
+### ============================================
+# @name loginMarie
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "marie.dupont@example.com",
+  "password": "monMotDePasse456"
+}
+
+
+### ============================================
+### 10. APPAREILS DE MARIE (doit voir le partagé)
 ### ============================================
 GET {{baseUrl}}/api/devices
-Authorization: Bearer {{login.response.body.data.token}}
+Authorization: Bearer {{loginMarie.response.body.data.token}}
 
 
 ### ============================================
-### 9. SUPPRIMER L'APPAREIL
+### 11. MODIFIER PERMISSION MARIE (read -> write)
 ### ============================================
-DELETE {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}
-Authorization: Bearer {{login.response.body.data.token}}
-
-### 10. RECRÉER UN APPAREIL POUR LES MESURES
-# @name createDeviceForMeasurements
-POST {{baseUrl}}/api/devices
+### Remplacer USER_ID par l'ID de Marie (visible en requête 8)
+PUT {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions/21ef1c69-2067-4ab7-a41a-6c9a0f3085f8
 Authorization: Bearer {{login.response.body.data.token}}
 Content-Type: application/json
 
 {
-  "serialNumber": "b1c2d3e4f5a6",
-  "alias": "Composteur Mesures"
-}
-
-
-### ============================================
-### 11. AJOUTER DES MESURES (pour test)
-### ============================================
-POST {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements
-Authorization: Bearer {{login.response.body.data.token}}
-Content-Type: application/json
-
-{
-  "temperature": 55.5,
-  "humidity": 48.2,
-  "motor": true,
-  "fan": false,
-  "phase": 1,
-  "emergency": false
+  "permission": "write"
 }
 
 ### ============================================
-### 12. AJOUTER UNE DEUXIÈME MESURE
+### 12. REVOQUER ACCES MARIE
 ### ============================================
-POST {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements
-Authorization: Bearer {{login.response.body.data.token}}
-Content-Type: application/json
-
-{
-  "temperature": 58.3,
-  "humidity": 50.1,
-  "motor": true,
-  "fan": false,
-  "phase": 1,
-  "emergency": false
-}
-
-### ============================================
-### 13. AJOUTER UNE TROISIÈME MESURE
-### ============================================
-POST {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements
-Authorization: Bearer {{login.response.body.data.token}}
-Content-Type: application/json
-
-{
-  "temperature": 61.0,
-  "humidity": 52.0,
-  "motor": true,
-  "fan": true,
-  "phase": 2,
-  "emergency": false
-}
-
-### ============================================
-### 14. HISTORIQUE COMPLET (les 3 mesures)
-### ============================================
-GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements
+### Remplacer USER_ID par l'ID de Marie
+DELETE {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions/21ef1c69-2067-4ab7-a41a-6c9a0f3085f8
 Authorization: Bearer {{login.response.body.data.token}}
 
 ### ============================================
-### 15. HISTORIQUE AVEC LIMITE (2 mesures)
+### 13. VERIFIER (liste vide)
 ### ============================================
-GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements?limit=2&offset=0
-Authorization: Bearer {{login.response.body.data.token}}
-
-### ============================================
-### 16. HISTORIQUE AVEC PAGINATION (page 2)
-### ============================================
-GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements?limit=2&offset=2
-Authorization: Bearer {{login.response.body.data.token}}
-
-### ============================================
-### 17. HISTORIQUE FILTRÉ PAR DATE
-### ============================================
-GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/measurements?startDate=0
-Authorization: Bearer {{login.response.body.data.token}}
-
-### ============================================
-### 18. RÉCUPÉRER LES PARAMÈTRES PAR DÉFAUT
-### ============================================
-GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/settings
-Authorization: Bearer {{login.response.body.data.token}}
-
-### ============================================
-### 19. METTRE À JOUR LES PARAMÈTRES
-### ============================================
-PUT {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/settings
-Authorization: Bearer {{login.response.body.data.token}}
-Content-Type: application/json
-
-{
-  "tempMaxUrgence": 70.0,
-  "humiditeMin": 35.0,
-  "dureeBrassagePhase1": 4
-}
-
-### ============================================
-### 20. VÉRIFIER LA MISE À JOUR
-### ============================================
-GET {{baseUrl}}/api/devices/{{createDeviceForMeasurements.response.body.data.id}}/settings
-Authorization: Bearer {{login.response.body.data.token}}
-
-### Tests
-GET http://localhost:3000/api/devices/dcd28d19-3dea-4293-83f2-63c076625e53/measurements
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE1MGYyN2Y3LWE4ODYtNDFiOS05ZTQ0LWU2Y2EyZjc5Zjg3NCIsImVtYWlsIjoiamVhbi5kdXBvbnRAZXhhbXBsZS5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTc4OTU0MjA0MywiZXhwIjoxNzkwMTQ2ODQzfQ.N2OePOkBBkfhkxyPqsTYViSBEznfPYetPz56AhtwYJo
-
-### Variables locales pour les tests Alerts
-@deviceIdTest = dcd28d19-3dea-4293-83f2-63c076625e53
-@alertIdTest = 870dfe20-9cfa-42e7-af4c-52362bd4577f
-
-### ============================================
-### 21. LISTER LES ALERTES
-### ============================================
-GET {{baseUrl}}/api/devices/{{deviceIdTest}}/alerts
-Authorization: Bearer {{login.response.body.data.token}}
-
-### ============================================
-### 22. LISTER SEULEMENT LES NON-ACQUITTÉES
-### ============================================
-GET {{baseUrl}}/api/devices/{{deviceIdTest}}/alerts?acknowledged=false
-Authorization: Bearer {{login.response.body.data.token}}
-
-### ============================================
-### 23. ACQUITTER UNE ALERTE
-### ============================================
-POST {{baseUrl}}/api/devices/{{deviceIdTest}}/alerts/{{alertIdTest}}/acknowledge
-Authorization: Bearer {{login.response.body.data.token}}
-
-### ============================================
-### 24. VÉRIFIER QUE L'ALERTE EST ACQUITTÉE
-### ============================================
-GET {{baseUrl}}/api/devices/{{deviceIdTest}}/alerts?acknowledged=true
+GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions
 Authorization: Bearer {{login.response.body.data.token}}

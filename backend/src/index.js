@@ -11,6 +11,7 @@ const deviceRoutes = require('./api/devices.routes');
 const measurementRoutes = require('./api/measurements.routes');
 const settingsRoutes = require('./api/settings.routes');
 const alertRoutes = require('./api/alerts.routes');
+const permissionRoutes = require('./api/permissions.routes');
 
 // Import WebSocket
 const initWebSocket = require('./ws');
@@ -32,10 +33,11 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
-app.use('/api/devices', deviceRoutes);
-app.use('/api/devices/:deviceId/measurements', measurementRoutes);
-app.use('/api/devices/:deviceId/settings', settingsRoutes);
+app.use('/api/devices/:deviceId/permissions', permissionRoutes);
 app.use('/api/devices/:deviceId/alerts', alertRoutes);
+app.use('/api/devices/:deviceId/settings', settingsRoutes);
+app.use('/api/devices/:deviceId/measurements', measurementRoutes);
+app.use('/api/devices', deviceRoutes);
 
 // Middleware de gestion d'erreurs
 app.use((err, req, res, next) => {
