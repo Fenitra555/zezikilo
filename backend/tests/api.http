@@ -89,9 +89,7 @@ Authorization: Bearer {{login.response.body.data.token}}
 DELETE {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}
 Authorization: Bearer {{login.response.body.data.token}}
 
-### ============================================
 ### 10. RECRÉER UN APPAREIL POUR LES MESURES
-### ============================================
 # @name createDeviceForMeasurements
 POST {{baseUrl}}/api/devices
 Authorization: Bearer {{login.response.body.data.token}}
@@ -203,3 +201,31 @@ Authorization: Bearer {{login.response.body.data.token}}
 ### Tests
 GET http://localhost:3000/api/devices/dcd28d19-3dea-4293-83f2-63c076625e53/measurements
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE1MGYyN2Y3LWE4ODYtNDFiOS05ZTQ0LWU2Y2EyZjc5Zjg3NCIsImVtYWlsIjoiamVhbi5kdXBvbnRAZXhhbXBsZS5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTc4OTU0MjA0MywiZXhwIjoxNzkwMTQ2ODQzfQ.N2OePOkBBkfhkxyPqsTYViSBEznfPYetPz56AhtwYJo
+
+### Variables locales pour les tests Alerts
+@deviceIdTest = dcd28d19-3dea-4293-83f2-63c076625e53
+@alertIdTest = 870dfe20-9cfa-42e7-af4c-52362bd4577f
+
+### ============================================
+### 21. LISTER LES ALERTES
+### ============================================
+GET {{baseUrl}}/api/devices/{{deviceIdTest}}/alerts
+Authorization: Bearer {{login.response.body.data.token}}
+
+### ============================================
+### 22. LISTER SEULEMENT LES NON-ACQUITTÉES
+### ============================================
+GET {{baseUrl}}/api/devices/{{deviceIdTest}}/alerts?acknowledged=false
+Authorization: Bearer {{login.response.body.data.token}}
+
+### ============================================
+### 23. ACQUITTER UNE ALERTE
+### ============================================
+POST {{baseUrl}}/api/devices/{{deviceIdTest}}/alerts/{{alertIdTest}}/acknowledge
+Authorization: Bearer {{login.response.body.data.token}}
+
+### ============================================
+### 24. VÉRIFIER QUE L'ALERTE EST ACQUITTÉE
+### ============================================
+GET {{baseUrl}}/api/devices/{{deviceIdTest}}/alerts?acknowledged=true
+Authorization: Bearer {{login.response.body.data.token}}

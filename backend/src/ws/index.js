@@ -144,14 +144,12 @@ async function handleCommand(io, socket, payload) {
 
   const room = `device:${deviceId}`;
 
-  // Vérifier qu'un device (ESP32) est bien connecté dans la room
   if (!isDeviceOnlineInRoom(io, room)) {
     return socket.emit('error', { message: 'Appareil hors ligne' });
   }
 
   const commandId = crypto.randomUUID();
 
-  // Insérer la commande dans la base
   await db('commands').insert({
     id: commandId,
     deviceId,
@@ -162,7 +160,6 @@ async function handleCommand(io, socket, payload) {
     sentAt: db.fn.now()
   });
 
-  // Relayer à l'ESP32
   const relayed = {
     type: 'command',
     deviceId: device.serialNumber,
@@ -175,7 +172,6 @@ async function handleCommand(io, socket, payload) {
 
   console.log(`📤 Commande ${command} relayée à ${device.serialNumber} (id=${commandId})`);
 
-  // Confirmer au frontend
   socket.emit('command-sent', { commandId, command });
 }
 
