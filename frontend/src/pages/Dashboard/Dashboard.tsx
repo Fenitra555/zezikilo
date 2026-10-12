@@ -1,8 +1,9 @@
 // src/pages/Dashboard/Dashboard.tsx
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDevicesStore } from '../../store/devices.store';
 import { Header } from '../../components/Header/Header';
 import { DeviceCard } from '../../components/DeviceCard/DeviceCard';
+import { AddDeviceModal } from '../../components/AddDeviceModal/AddDeviceModal';
 import './Dashboard.css';
 
 export function Dashboard() {
@@ -10,6 +11,9 @@ export function Dashboard() {
   const loading = useDevicesStore((state) => state.loading);
   const error = useDevicesStore((state) => state.error);
   const fetchDevices = useDevicesStore((state) => state.fetchDevices);
+  const addDevice = useDevicesStore((state) => state.addDevice);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchDevices();
@@ -22,7 +26,12 @@ export function Dashboard() {
       <main className="dashboard-main">
         <div className="dashboard-title-row">
           <h2 className="dashboard-title">Mes composteurs</h2>
-          <button className="btn-add-device">+ Ajouter un appareil</button>
+          <button
+            className="btn-add-device"
+            onClick={() => setIsModalOpen(true)}
+          >
+            + Ajouter un appareil
+          </button>
         </div>
 
         {loading && <p className="dashboard-info">Chargement...</p>}
@@ -46,6 +55,12 @@ export function Dashboard() {
           </div>
         )}
       </main>
+
+      <AddDeviceModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={(device) => addDevice(device)}
+      />
     </div>
   );
 }
