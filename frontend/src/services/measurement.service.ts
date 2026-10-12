@@ -2,7 +2,7 @@
 import api from './api';
 import type { PaginatedMeasurements, ApiSuccessResponse } from '../types';
 
-interface ListOptions {
+export interface ListMeasurementsOptions {
   limit?: number;
   offset?: number;
   startDate?: number;
@@ -10,10 +10,10 @@ interface ListOptions {
 }
 
 export const measurementService = {
-  /**
-   * Lister les mesures d'un appareil
-   */
-  async list(deviceId: string, options: ListOptions = {}): Promise<PaginatedMeasurements> {
+  async list(
+    deviceId: string,
+    options: ListMeasurementsOptions = {}
+  ): Promise<PaginatedMeasurements> {
     const params = new URLSearchParams();
     if (options.limit !== undefined) params.append('limit', String(options.limit));
     if (options.offset !== undefined) params.append('offset', String(options.offset));

@@ -115,12 +115,20 @@ export function DeviceDetail() {
               {connected && <span className="ws-badge">● Temps reel</span>}
             </p>
           </div>
-          <button
-            className="btn-settings"
-            onClick={() => navigate(`/devices/${deviceId}/settings`)}
-          >
-            Parametres
-          </button>
+          <div className="detail-header-actions">
+            <button
+              className="btn-settings"
+              onClick={() => navigate(`/devices/${deviceId}/history`)}
+            >
+              Historique
+            </button>
+            <button
+              className="btn-settings"
+              onClick={() => navigate(`/devices/${deviceId}/settings`)}
+            >
+              Parametres
+            </button>
+          </div>
         </div>
 
         {/* Banniere d'alertes */}

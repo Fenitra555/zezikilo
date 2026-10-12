@@ -236,3 +236,8 @@
   color: #FFFFFF;
   border-color: #4FAE32;
 }
+
+.detail-header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
