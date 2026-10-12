@@ -23,8 +23,11 @@ export function Login() {
       const { user, token } = await authService.login(email, password);
       login(user, token);
       navigate('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erreur de connexion');
+    } catch (err: unknown) {
+      const message =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+        || 'Erreur de connexion';
+      setError(message);
     } finally {
       setLoading(false);
     }
