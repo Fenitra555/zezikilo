@@ -108,11 +108,19 @@ export function DeviceDetail() {
         </button>
 
         <div className="detail-header">
-          <h2 className="detail-title">{device.alias || device.serialNumber}</h2>
-          <p className="detail-subtitle">
-            Serial : {device.serialNumber}
-            {connected && <span className="ws-badge">● Temps reel</span>}
-          </p>
+          <div className="detail-header-left">
+            <h2 className="detail-title">{device.alias || device.serialNumber}</h2>
+            <p className="detail-subtitle">
+              Serial : {device.serialNumber}
+              {connected && <span className="ws-badge">● Temps reel</span>}
+            </p>
+          </div>
+          <button
+            className="btn-settings"
+            onClick={() => navigate(`/devices/${deviceId}/settings`)}
+          >
+            Parametres
+          </button>
         </div>
 
         {/* Banniere d'alertes */}

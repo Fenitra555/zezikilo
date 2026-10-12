@@ -6,6 +6,7 @@ import { Login } from './pages/Login/Login';
 import { Register } from './pages/Register/Register';
 import { Dashboard } from './pages/Dashboard/Dashboard';
 import { DeviceDetail } from './pages/DeviceDetail/DeviceDetail';
+import { Settings } from './pages/Settings/Settings';
 import { useAuthStore } from './store/auth.store';
 import { websocketService } from './services/websocket.service';
 import './App.css';
@@ -20,12 +21,10 @@ function App() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const token = useAuthStore((state) => state.token);
 
-  // Charge l'utilisateur au demarrage
   useEffect(() => {
     loadFromStorage();
   }, [loadFromStorage]);
 
-  // Ouvre/ferme la connexion WebSocket selon l'etat d'authentification
   useEffect(() => {
     if (isAuthenticated && token) {
       websocketService.connect(token);
@@ -41,19 +40,15 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route
           path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
         />
         <Route
           path="/devices/:deviceId"
-          element={
-            <ProtectedRoute>
-              <DeviceDetail />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute><DeviceDetail /></ProtectedRoute>}
+        />
+        <Route
+          path="/devices/:deviceId/settings"
+          element={<ProtectedRoute><Settings /></ProtectedRoute>}
         />
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
