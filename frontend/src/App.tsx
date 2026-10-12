@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { Login } from './pages/Login/Login';
 import { Register } from './pages/Register/Register';
 import { Dashboard } from './pages/Dashboard/Dashboard';
+import { DeviceDetail } from './pages/DeviceDetail/DeviceDetail';
 import { useAuthStore } from './store/auth.store';
 import './App.css';
 
@@ -30,6 +31,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/devices/:deviceId"
+          element={
+            <ProtectedRoute>
+              <DeviceDetail />
             </ProtectedRoute>
           }
         />

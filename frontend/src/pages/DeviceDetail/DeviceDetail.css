@@ -1,0 +1,162 @@
+/* src/pages/DeviceDetail/DeviceDetail.css */
+.detail-page {
+  min-height: 100vh;
+  background-color: #DADADA;
+}
+
+.detail-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 3rem;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  color: #585857;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.4rem 0;
+  margin-bottom: 1rem;
+  transition: color 0.2s;
+}
+
+.btn-back:hover {
+  color: #4FAE32;
+}
+
+.detail-header {
+  margin-bottom: 1.5rem;
+}
+
+.detail-title {
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+  color: #1D1D1B;
+  font-size: 1.6rem;
+  margin: 0 0 0.25rem;
+}
+
+.detail-subtitle {
+  color: #585857;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.detail-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+  color: #1D1D1B;
+  font-size: 1.15rem;
+  margin: 0 0 1rem;
+}
+
+/* Grille de l'etat actuel */
+.live-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.live-card {
+  background-color: #FFFFFF;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  border-left: 4px solid #4FAE32;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.live-card-wide {
+  grid-column: span 2;
+}
+
+.live-card-emergency {
+  border-left-color: #d32f2f;
+  background-color: #ffebee;
+}
+
+.live-label {
+  color: #585857;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.live-value {
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+  color: #1D1D1B;
+  font-size: 1.35rem;
+}
+
+.live-value.on {
+  color: #4FAE32;
+}
+
+.live-value.off {
+  color: #585857;
+}
+
+/* Tableau des mesures */
+.measurements-table-wrapper {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.measurements-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+}
+
+.measurements-table thead {
+  background-color: #4FAE32;
+}
+
+.measurements-table th {
+  color: #FFFFFF;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.measurements-table td {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid #DADADA;
+  color: #1D1D1B;
+  font-size: 0.9rem;
+}
+
+.measurements-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.measurements-table tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* Etats */
+.detail-info {
+  color: #585857;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  text-align: center;
+  padding: 2rem;
+}
+
+.detail-error {
+  background-color: #ffebee;
+  color: #d32f2f;
+  padding: 1rem;
+  border-radius: 4px;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+}

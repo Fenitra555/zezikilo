@@ -5,25 +5,27 @@
 
 
 ### ============================================
-### PARTIE 1 : SETUP INITIAL
-### ============================================
-
 ### 1. HEALTH CHECK
+### ============================================
 GET {{baseUrl}}/api/health
 
 
-### 2. INSCRIPTION JEAN (une seule fois)
+### ============================================
+### 2. REGISTER ALICE (une seule fois)
+### ============================================
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
-  "email": "jean.dupont@example.com",
-  "password": "monMotDePasse123",
-  "fullName": "Jean Dupont"
+  "email": "alice@example.com",
+  "password": "aliceMotDePasse",
+  "fullName": "Alice Test"
 }
 
 
-### 3. LOGIN JEAN
+### ============================================
+### 3. LOGIN ALICE
+### ============================================
 # @name loginAlice
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
@@ -34,7 +36,9 @@ Content-Type: application/json
 }
 
 
-### 4. CREER APPAREIL COMPOSTEUR
+### ============================================
+### 4. CREER UN APPAREIL
+### ============================================
 # @name createDevice
 POST {{baseUrl}}/api/devices
 Authorization: Bearer {{loginAlice.response.body.data.token}}
@@ -46,157 +50,66 @@ Content-Type: application/json
 }
 
 
-### 5. INSCRIPTION MARIE (une seule fois)
-# @name registerMarie
-POST {{baseUrl}}/api/auth/register
+### ============================================
+### 5. AJOUTER UNE MESURE (temp: 58.5)
+### ============================================
+POST {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/measurements
+Authorization: Bearer {{loginAlice.response.body.data.token}}
 Content-Type: application/json
 
 {
-  "email": "marie.dupont@example.com",
-  "password": "monMotDePasse456",
-  "fullName": "Marie Dupont"
+  "temperature": 58.5,
+  "humidity": 47.2,
+  "motor": true,
+  "fan": false,
+  "phase": 1,
+  "emergency": false
 }
 
 
 ### ============================================
-### PARTIE 2 : TESTS PERMISSIONS
+### 6. AJOUTER UNE MESURE (temp: 62.1)
 ### ============================================
-
-### 6. LISTER LES PERMISSIONS (Jean admin)
-GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions
-Authorization: Bearer {{login.response.body.data.token}}
-
-
-### 7. PARTAGER AVEC MARIE (read)
-POST {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions
-Authorization: Bearer {{login.response.body.data.token}}
+POST {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/measurements
+Authorization: Bearer {{loginAlice.response.body.data.token}}
 Content-Type: application/json
 
 {
-  "email": "marie.dupont@example.com",
-  "permission": "read"
+  "temperature": 62.1,
+  "humidity": 51.0,
+  "motor": true,
+  "fan": true,
+  "phase": 2,
+  "emergency": false
 }
-
-
-### 8. VERIFIER (2 permissions)
-GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions
-Authorization: Bearer {{login.response.body.data.token}}
-
-
-### 9. LOGIN MARIE
-# @name loginMarie
-POST {{baseUrl}}/api/auth/login
-Content-Type: application/json
-
-{
-  "email": "marie.dupont@example.com",
-  "password": "monMotDePasse456"
-}
-
-
-### 10. APPAREILS DE MARIE (voit le partagé)
-GET {{baseUrl}}/api/devices
-Authorization: Bearer {{loginMarie.response.body.data.token}}
-
-
-### 11. MODIFIER PERMISSION MARIE (read -> write)
-PUT {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions/{{loginMarie.response.body.data.user.id}}
-Authorization: Bearer {{login.response.body.data.token}}
-Content-Type: application/json
-
-{
-  "permission": "write"
-}
-
-
-### 12. REVOQUER ACCES MARIE
-DELETE {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions/{{loginMarie.response.body.data.user.id}}
-Authorization: Bearer {{login.response.body.data.token}}
-
-
-### 13. VERIFIER (Jean seul reste)
-GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/permissions
-Authorization: Bearer {{login.response.body.data.token}}
 
 
 ### ============================================
-### PARTIE 3 : TESTS GESTION D'ERREURS
+### 7. AJOUTER UNE MESURE (temp: 45.3)
 ### ============================================
+POST {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/measurements
+Authorization: Bearer {{loginAlice.response.body.data.token}}
+Content-Type: application/json
 
-### 14. ROUTE INEXISTANTE (404)
-GET {{baseUrl}}/api/route-qui-nexiste-pas
+{
+  "temperature": 45.3,
+  "humidity": 49.5,
+  "motor": false,
+  "fan": false,
+  "phase": 3,
+  "emergency": false
+}
 
 
-### 15. TOKEN MANQUANT (401)
+### ============================================
+### 8. LISTER LES MESURES
+### ============================================
+GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}/measurements
+Authorization: Bearer {{loginAlice.response.body.data.token}}
+
+
+### ============================================
+### 9. LISTER LES APPAREILS
+### ============================================
 GET {{baseUrl}}/api/devices
-
-
-### 16. TOKEN MAL FORMATÉ (401)
-GET {{baseUrl}}/api/devices
-Authorization: token_bidon_sans_bearer
-
-
-### 17. TOKEN INVALIDE (401)
-GET {{baseUrl}}/api/devices
-Authorization: Bearer ceci_est_un_faux_token
-
-
-### 18. APPAREIL INEXISTANT (404)
-GET {{baseUrl}}/api/devices/00000000-0000-0000-0000-000000000000
-Authorization: Bearer {{login.response.body.data.token}}
-
-
-### 19. MARIE TENTE D'ACCÉDER À L'APPAREIL DE JEAN (403)
-GET {{baseUrl}}/api/devices/{{createDevice.response.body.data.id}}
-Authorization: Bearer {{loginMarie.response.body.data.token}}
-
-
-### 20. EMAIL DÉJÀ UTILISÉ (400)
-POST {{baseUrl}}/api/auth/register
-Content-Type: application/json
-
-{
-  "email": "jean.dupont@example.com",
-  "password": "autremotdepasse",
-  "fullName": "Jean Bis"
-}
-
-
-### 21. CHAMPS MANQUANTS - REGISTER (400)
-POST {{baseUrl}}/api/auth/register
-Content-Type: application/json
-
-{
-  "email": "sanspassword@example.com"
-}
-
-
-### 22. IDENTIFIANTS INVALIDES - LOGIN (401)
-POST {{baseUrl}}/api/auth/login
-Content-Type: application/json
-
-{
-  "email": "jean.dupont@example.com",
-  "password": "mauvaisMotDePasse"
-}
-
-
-### 23. SERIAL NUMBER MANQUANT (400)
-POST {{baseUrl}}/api/devices
-Authorization: Bearer {{login.response.body.data.token}}
-Content-Type: application/json
-
-{
-  "alias": "Sans Serial"
-}
-
-
-### 24. APPAREIL DÉJÀ ASSOCIÉ (400)
-POST {{baseUrl}}/api/devices
-Authorization: Bearer {{login.response.body.data.token}}
-Content-Type: application/json
-
-{
-  "serialNumber": "a0b7c8d9e0f1",
-  "alias": "Doublon"
-}
+Authorization: Bearer {{loginAlice.response.body.data.token}}
