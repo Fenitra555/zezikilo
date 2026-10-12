@@ -5,6 +5,7 @@ import { Header } from '../../components/Header/Header';
 import { CommandButtons } from '../../components/CommandButtons/CommandButtons';
 import { deviceService } from '../../services/device.service';
 import { measurementService } from '../../services/measurement.service';
+import { useDeviceWebSocket } from '../../hooks/useDeviceWebSocket';
 import type { Device, Measurement } from '../../types';
 import './DeviceDetail.css';
 
@@ -15,6 +16,9 @@ export function DeviceDetail() {
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  // WebSocket temps reel
+  const { measurement: liveMeasurement, alerts, connected } = useDeviceWebSocket(deviceId);
 
   useEffect(() => {
     if (!deviceId) return;
@@ -80,7 +84,18 @@ export function DeviceDetail() {
     );
   }
 
-  const latest = measurements[0];
+  // Priorite : live WebSocket > REST
+  const restLatest = measurements[0];
+  const latest = liveMeasurement ?? (restLatest ? {
+    temperature: restLatest.temperature,
+    humidity: restLatest.humidity,
+    motor: Boolean(restLatest.motor),
+    fan: Boolean(restLatest.fan),
+    phase: restLatest.phase,
+    emergency: Boolean(restLatest.emergency),
+    timestamp: restLatest.timestamp
+  } : null);
+
   const isEmergency = Boolean(latest?.emergency);
 
   return (
@@ -94,8 +109,19 @@ export function DeviceDetail() {
 
         <div className="detail-header">
           <h2 className="detail-title">{device.alias || device.serialNumber}</h2>
-          <p className="detail-subtitle">Serial : {device.serialNumber}</p>
+          <p className="detail-subtitle">
+            Serial : {device.serialNumber}
+            {connected && <span className="ws-badge">● Temps reel</span>}
+          </p>
         </div>
+
+        {/* Banniere d'alertes */}
+        {alerts.length > 0 && (
+          <div className={`alert-banner alert-${alerts[0].severity}`}>
+            <strong>{alerts[0].severity.toUpperCase()}</strong>
+            <span>{alerts[0].message}</span>
+          </div>
+        )}
 
         <section className="detail-section">
           <h3 className="section-title">Etat actuel</h3>

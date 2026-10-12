@@ -7,6 +7,7 @@ import { Register } from './pages/Register/Register';
 import { Dashboard } from './pages/Dashboard/Dashboard';
 import { DeviceDetail } from './pages/DeviceDetail/DeviceDetail';
 import { useAuthStore } from './store/auth.store';
+import { websocketService } from './services/websocket.service';
 import './App.css';
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -16,10 +17,22 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 
 function App() {
   const loadFromStorage = useAuthStore((state) => state.loadFromStorage);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const token = useAuthStore((state) => state.token);
 
+  // Charge l'utilisateur au demarrage
   useEffect(() => {
     loadFromStorage();
   }, [loadFromStorage]);
+
+  // Ouvre/ferme la connexion WebSocket selon l'etat d'authentification
+  useEffect(() => {
+    if (isAuthenticated && token) {
+      websocketService.connect(token);
+    } else {
+      websocketService.disconnect();
+    }
+  }, [isAuthenticated, token]);
 
   return (
     <BrowserRouter>
