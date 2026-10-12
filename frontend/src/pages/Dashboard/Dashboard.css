@@ -1,0 +1,87 @@
+/* src/pages/Dashboard/Dashboard.css */
+.dashboard-page {
+  min-height: 100vh;
+  background-color: #DADADA;
+}
+
+.dashboard-main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.dashboard-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-title {
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+  color: #1D1D1B;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.btn-add-device {
+  background-color: #4FAE32;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-add-device:hover {
+  background-color: #3d8c28;
+}
+
+.dashboard-info {
+  color: #585857;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  text-align: center;
+  padding: 2rem;
+}
+
+.dashboard-error {
+  background-color: #ffebee;
+  color: #d32f2f;
+  padding: 1rem;
+  border-radius: 4px;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  margin-bottom: 1rem;
+}
+
+.dashboard-empty {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.dashboard-empty p {
+  margin: 0.3rem 0;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  color: #585857;
+}
+
+.dashboard-empty p:first-child {
+  font-size: 1.1rem;
+  color: #1D1D1B;
+  font-weight: bold;
+}
+
+.dashboard-empty-hint {
+  font-size: 0.9rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}

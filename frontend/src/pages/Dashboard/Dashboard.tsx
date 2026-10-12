@@ -1,22 +1,51 @@
 // src/pages/Dashboard/Dashboard.tsx
-import { useAuthStore } from '../../store/auth.store';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDevicesStore } from '../../store/devices.store';
+import { Header } from '../../components/Header/Header';
+import { DeviceCard } from '../../components/DeviceCard/DeviceCard';
+import './Dashboard.css';
 
 export function Dashboard() {
-  const user = useAuthStore((state) => state.user);
-  const logout = useAuthStore((state) => state.logout);
-  const navigate = useNavigate();
+  const devices = useDevicesStore((state) => state.devices);
+  const loading = useDevicesStore((state) => state.loading);
+  const error = useDevicesStore((state) => state.error);
+  const fetchDevices = useDevicesStore((state) => state.fetchDevices);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+  useEffect(() => {
+    fetchDevices();
+  }, [fetchDevices]);
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Dashboard</h1>
-      <p>Bienvenue {user?.fullName}</p>
-      <button onClick={handleLogout}>Se deconnecter</button>
+    <div className="dashboard-page">
+      <Header />
+
+      <main className="dashboard-main">
+        <div className="dashboard-title-row">
+          <h2 className="dashboard-title">Mes composteurs</h2>
+          <button className="btn-add-device">+ Ajouter un appareil</button>
+        </div>
+
+        {loading && <p className="dashboard-info">Chargement...</p>}
+
+        {error && <p className="dashboard-error">{error}</p>}
+
+        {!loading && !error && devices.length === 0 && (
+          <div className="dashboard-empty">
+            <p>Aucun appareil associe</p>
+            <p className="dashboard-empty-hint">
+              Ajoutez votre premier composteur pour commencer.
+            </p>
+          </div>
+        )}
+
+        {!loading && devices.length > 0 && (
+          <div className="dashboard-grid">
+            {devices.map((device) => (
+              <DeviceCard key={device.id} device={device} />
+            ))}
+          </div>
+        )}
+      </main>
     </div>
   );
 }

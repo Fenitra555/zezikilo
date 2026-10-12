@@ -1,0 +1,46 @@
+/* src/components/Header/Header.css */
+.app-header {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #DADADA;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.header-logo {
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+  color: #4FAE32;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.header-user {
+  color: #585857;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 0.95rem;
+}
+
+.header-logout {
+  background-color: transparent;
+  color: #585857;
+  border: 1px solid #DADADA;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.header-logout:hover {
+  background-color: #DADADA;
+  color: #1D1D1B;
+}

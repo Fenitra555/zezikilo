@@ -24,25 +24,25 @@ Content-Type: application/json
 
 
 ### 3. LOGIN JEAN
-# @name login
+# @name loginAlice
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "jean.dupont@example.com",
-  "password": "monMotDePasse123"
+  "email": "alice@example.com",
+  "password": "aliceMotDePasse"
 }
 
 
 ### 4. CREER APPAREIL COMPOSTEUR
 # @name createDevice
 POST {{baseUrl}}/api/devices
-Authorization: Bearer {{login.response.body.data.token}}
+Authorization: Bearer {{loginAlice.response.body.data.token}}
 Content-Type: application/json
 
 {
-  "serialNumber": "a0b7c8d9e0f1",
-  "alias": "Composteur Jardin"
+  "serialNumber": "test00000001",
+  "alias": "Composteur Cuisine"
 }
 
 
