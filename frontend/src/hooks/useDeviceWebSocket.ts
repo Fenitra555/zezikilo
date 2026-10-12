@@ -1,5 +1,5 @@
 // src/hooks/useDeviceWebSocket.ts
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { websocketService } from '../services/websocket.service';
 
 export interface LiveMeasurement {
@@ -40,7 +40,16 @@ export function useDeviceWebSocket(
 ): Return {
   const [measurement, setMeasurement] = useState<LiveMeasurement | null>(null);
   const [alerts, setAlerts] = useState<LiveAlert[]>([]);
-  const [connected, setConnected] = useState(false);
+  // Initialisation paresseuse : on lit l'etat du socket au premier render
+  const [connected, setConnected] = useState<boolean>(
+    () => websocketService.isConnected()
+  );
+
+  // Ref pour stabiliser le callback sans relancer l'effect
+  const onCommandAckRef = useRef(options.onCommandAck);
+  useEffect(() => {
+    onCommandAckRef.current = options.onCommandAck;
+  }, [options.onCommandAck]);
 
   useEffect(() => {
     if (!deviceId) return;
@@ -50,8 +59,6 @@ export function useDeviceWebSocket(
       console.warn('[WS] Socket non initialise');
       return;
     }
-
-    setConnected(socket.connected);
 
     // S'abonner a la room de l'appareil
     socket.emit('subscribe', { deviceId });
@@ -74,7 +81,7 @@ export function useDeviceWebSocket(
     };
 
     const handleCommandAck = (payload: CommandAck) => {
-      options.onCommandAck?.(payload);
+      onCommandAckRef.current?.(payload);
     };
 
     socket.on('connect', handleConnect);
