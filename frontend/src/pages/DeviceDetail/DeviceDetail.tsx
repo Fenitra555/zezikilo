@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Header } from '../../components/Header/Header';
+import { CommandButtons } from '../../components/CommandButtons/CommandButtons';
 import { deviceService } from '../../services/device.service';
 import { measurementService } from '../../services/measurement.service';
 import type { Device, Measurement } from '../../types';
@@ -136,6 +137,12 @@ export function DeviceDetail() {
             <p className="detail-info">Aucune mesure enregistree.</p>
           )}
         </section>
+
+        <CommandButtons
+          deviceId={device.id}
+          motorActive={Boolean(latest?.motor)}
+          fanActive={Boolean(latest?.fan)}
+        />
 
         <section className="detail-section">
           <h3 className="section-title">Dernieres mesures</h3>

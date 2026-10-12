@@ -12,6 +12,7 @@ const measurementRoutes = require('./api/measurements.routes');
 const settingsRoutes = require('./api/settings.routes');
 const alertRoutes = require('./api/alerts.routes');
 const permissionRoutes = require('./api/permissions.routes');
+const commandRoutes = require('./api/commands.routes');
 
 // Import WebSocket et errorHandler
 const initWebSocket = require('./ws');
@@ -33,35 +34,39 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Routes spécifiques (avec :deviceId) AVANT les routes génériques
+// Routes specifiques (avec :deviceId) AVANT les routes generiques
 app.use('/api/devices/:deviceId/permissions', permissionRoutes);
 app.use('/api/devices/:deviceId/alerts', alertRoutes);
 app.use('/api/devices/:deviceId/settings', settingsRoutes);
 app.use('/api/devices/:deviceId/measurements', measurementRoutes);
+app.use('/api/devices/:deviceId/commands', commandRoutes);
 
-// Routes génériques
+// Routes generiques
 app.use('/api/auth', authRoutes);
 app.use('/api/devices', deviceRoutes);
 
-// Middleware 404 (routes non trouvées)
+// Middleware 404
 app.use((req, res, next) => {
-  const error = new Error(`Route non trouvée : ${req.method} ${req.path}`);
+  const error = new Error(`Route non trouvee : ${req.method} ${req.path}`);
   error.status = 404;
   next(error);
 });
 
-// Middleware d'erreurs (DOIT être en dernier)
+// Middleware d'erreurs (DOIT etre en dernier)
 app.use(errorHandler);
 
-// Créer le serveur HTTP
+// Creer le serveur HTTP
 const server = http.createServer(app);
 
 // Initialiser Socket.IO
 const io = initWebSocket(server);
 
-// Démarrer le serveur
+// Rendre io accessible depuis les routes via req.app.locals
+app.locals.io = io;
+
+// Demarrer le serveur
 server.listen(PORT, () => {
-  console.log(`🚀 Serveur backend démarré sur http://localhost:${PORT}`);
+  console.log(`🚀 Serveur backend demarre sur http://localhost:${PORT}`);
   console.log(`📡 Health check: http://localhost:${PORT}/api/health`);
-  console.log(`🔌 WebSocket prêt sur ws://localhost:${PORT}`);
+  console.log(`🔌 WebSocket pret sur ws://localhost:${PORT}`);
 });

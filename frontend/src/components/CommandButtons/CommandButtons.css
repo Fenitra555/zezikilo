@@ -1,0 +1,91 @@
+/* src/components/CommandButtons/CommandButtons.css */
+.commands-section {
+  margin-bottom: 2rem;
+}
+
+.commands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.command-group {
+  background-color: #FFFFFF;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.command-label {
+  display: block;
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+  color: #1D1D1B;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+.command-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-command {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-command-start {
+  background-color: #4FAE32;
+  color: #FFFFFF;
+}
+
+.btn-command-start:hover:not(:disabled) {
+  background-color: #3d8c28;
+}
+
+.btn-command-stop {
+  background-color: #d32f2f;
+  color: #FFFFFF;
+}
+
+.btn-command-stop:hover:not(:disabled) {
+  background-color: #b71c1c;
+}
+
+.btn-command:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.command-feedback {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 0.9rem;
+}
+
+.command-feedback.success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.command-feedback.error {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.command-hint {
+  margin-top: 1rem;
+  color: #585857;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 0.85rem;
+  font-style: italic;
+}
