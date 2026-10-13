@@ -59,7 +59,7 @@ export function AddDeviceModal({ isOpen, onClose, onSuccess }: AddDeviceModalPro
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Numero de serie</label>
+            <label>Numéro de série</label>
             <input
               type="text"
               value={serialNumber}
@@ -69,7 +69,7 @@ export function AddDeviceModal({ isOpen, onClose, onSuccess }: AddDeviceModalPro
               maxLength={12}
             />
             <small className="hint">
-              12 caracteres hexadecimaux, inscrits sur l'etiquette de l'appareil
+              12 caractères hexadécimaux, inscrits sur l'etiquette de l'appareil
             </small>
           </div>
 

@@ -15,9 +15,9 @@ export function DeviceCard({ device }: DeviceCardProps) {
   };
 
   const formatLastSync = (dateStr: string | null): string => {
-    if (!dateStr) return 'Jamais synchronise';
+    if (!dateStr) return 'Jamais synchronisé';
     const date = new Date(dateStr);
-    return `Derniere synchro : ${date.toLocaleString('fr-FR')}`;
+    return `Dernière synchro : ${date.toLocaleString('fr-FR')}`;
   };
 
   return (

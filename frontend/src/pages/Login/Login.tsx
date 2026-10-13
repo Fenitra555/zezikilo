@@ -37,7 +37,7 @@ export function Login() {
     <div className="login-container">
       <div className="login-card">
         <h1>Zezik'Ilo</h1>
-        <p className="subtitle">Connexion a votre composteur</p>
+        <p className="subtitle">Connexion à votre composteur</p>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -70,7 +70,7 @@ export function Login() {
         </form>
 
         <p className="register-link">
-          Pas encore de compte ? <Link to="/register">Creer un compte</Link>
+          Pas encore de compte ? <Link to="/register">Créer un compte</Link>
         </p>
       </div>
     </div>

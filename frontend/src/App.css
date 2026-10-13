@@ -1,12 +1,70 @@
 /* src/App.css */
+:root {
+  --vert: #4FAE32;
+  --vert-fonce: #388E3C;
+  --vert-hover: #3d8c28;
+  --gris-fond: #F5F5F3;
+  --gris-clair: #E5E5E3;
+  --gris-moyen: #DADADA;
+  --gris-texte: #4A4A48;
+  --gris-noir: #585857;
+  --noir: #1D1D1B;
+  --blanc: #FFFFFF;
+  --rouge: #D32F2F;
+  --rouge-fonce: #B71C1C;
+  --rouge-fond: #FFEBEE;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.10);
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-full: 20px;
+  --font-titre: 'Nunito', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --font-texte: 'Inter', 'Arial Narrow', system-ui, sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+html, body, #root {
+  height: 100%;
+}
+
 body {
-  font-family: 'Arial Narrow', Arial, sans-serif;
-  background-color: #DADADA;
-  color: #1D1D1B;
+  font-family: var(--font-texte);
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: var(--gris-fond);
+  color: var(--noir);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-titre);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: 16px; /* Evite le zoom automatique sur iOS */
+}
+
+/* Empeche le zoom sur les inputs sur iOS */
+@media (max-width: 768px) {
+  input, textarea, select {
+    font-size: 16px;
+  }
 }

@@ -52,7 +52,7 @@ export function DeviceDetail() {
 
   const getPhaseLabel = (phase: number): string => {
     switch (phase) {
-      case 1: return 'Phase 1 - Montee en temperature';
+      case 1: return 'Phase 1 - Montée en température';
       case 2: return 'Phase 2 - Fermentation thermophile';
       case 3: return 'Phase 3 - Maturation';
       default: return `Phase ${phase}`;
@@ -112,7 +112,7 @@ export function DeviceDetail() {
             <h2 className="detail-title">{device.alias || device.serialNumber}</h2>
             <p className="detail-subtitle">
               Serial : {device.serialNumber}
-              {connected && <span className="ws-badge">● Temps reel</span>}
+              {connected && <span className="ws-badge">● Temps réel</span>}
             </p>
           </div>
           <div className="detail-header-actions">
@@ -126,7 +126,7 @@ export function DeviceDetail() {
               className="btn-settings"
               onClick={() => navigate(`/devices/${deviceId}/settings`)}
             >
-              Parametres
+              Paramètres
             </button>
           </div>
         </div>
@@ -145,23 +145,23 @@ export function DeviceDetail() {
           {latest ? (
             <div className="live-grid">
               <div className="live-card">
-                <span className="live-label">Temperature</span>
+                <span className="live-label">Température</span>
                 <span className="live-value">{latest.temperature.toFixed(1)} °C</span>
               </div>
               <div className="live-card">
-                <span className="live-label">Humidite</span>
+                <span className="live-label">Humidité</span>
                 <span className="live-value">{latest.humidity.toFixed(1)} %</span>
               </div>
               <div className="live-card">
                 <span className="live-label">Moteur</span>
                 <span className={`live-value ${latest.motor ? 'on' : 'off'}`}>
-                  {latest.motor ? 'En marche' : 'Arrete'}
+                  {latest.motor ? 'En marche' : 'Arrêté'}
                 </span>
               </div>
               <div className="live-card">
                 <span className="live-label">Ventilateur</span>
                 <span className={`live-value ${latest.fan ? 'on' : 'off'}`}>
-                  {latest.fan ? 'En marche' : 'Arrete'}
+                  {latest.fan ? 'En marche' : 'Arrêté'}
                 </span>
               </div>
               <div className="live-card live-card-wide">
@@ -176,7 +176,7 @@ export function DeviceDetail() {
               )}
             </div>
           ) : (
-            <p className="detail-info">Aucune mesure enregistree.</p>
+            <p className="detail-info">Aucune mesure enregistrée.</p>
           )}
         </section>
 
@@ -187,7 +187,7 @@ export function DeviceDetail() {
         />
 
         <section className="detail-section">
-          <h3 className="section-title">Dernieres mesures</h3>
+          <h3 className="section-title">Dernières mesures</h3>
 
           {measurements.length === 0 ? (
             <p className="detail-info">Aucune mesure disponible.</p>

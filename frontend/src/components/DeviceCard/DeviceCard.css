@@ -1,17 +1,18 @@
 /* src/components/DeviceCard/DeviceCard.css */
 .device-card {
-  background-color: #FFFFFF;
-  border-radius: 8px;
-  padding: 1.25rem 1.5rem;
-  border-left: 4px solid #4FAE32;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background-color: var(--blanc);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem 1.25rem;
+  border-left: 4px solid var(--vert);
+  box-shadow: var(--shadow-md);
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
+  min-height: 120px;
 }
 
 .device-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .device-card-header {
@@ -22,27 +23,29 @@
 }
 
 .device-card-title {
-  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
-  color: #1D1D1B;
+  font-family: var(--font-titre);
+  color: var(--noir);
   font-size: 1.15rem;
   margin: 0;
+  font-weight: 800;
 }
 
 .device-card-status {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: #4FAE32;
+  background-color: var(--vert);
+  flex-shrink: 0;
 }
 
 .device-card-body p {
   margin: 0.3rem 0;
-  color: #585857;
-  font-family: 'Arial Narrow', Arial, sans-serif;
-  font-size: 0.9rem;
+  color: var(--gris-texte);
+  font-size: 0.95rem;
 }
 
 .device-card-serial strong,
 .device-card-firmware strong {
-  color: #1D1D1B;
+  color: var(--noir);
+  font-weight: 600;
 }

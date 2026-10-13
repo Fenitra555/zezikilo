@@ -1,27 +1,36 @@
 /* src/components/CommandButtons/CommandButtons.css */
 .commands-section {
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
+}
+
+.section-title {
+  font-family: var(--font-titre);
+  color: var(--noir);
+  font-size: 1.2rem;
+  margin: 0 0 1rem;
+  font-weight: 800;
 }
 
 .commands-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
   gap: 1rem;
 }
 
 .command-group {
-  background-color: #FFFFFF;
-  padding: 1rem 1.25rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background-color: var(--blanc);
+  padding: 1.15rem 1.25rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
 }
 
 .command-label {
   display: block;
-  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
-  color: #1D1D1B;
-  font-size: 0.95rem;
-  margin-bottom: 0.75rem;
+  font-family: var(--font-titre);
+  color: var(--noir);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.85rem;
 }
 
 .command-buttons {
@@ -31,32 +40,32 @@
 
 .btn-command {
   flex: 1;
-  padding: 0.6rem 0.8rem;
+  padding: 0.75rem 0.8rem;
   border: none;
-  border-radius: 4px;
-  font-family: 'Arial Narrow', Arial, sans-serif;
-  font-weight: bold;
-  font-size: 0.9rem;
-  cursor: pointer;
+  border-radius: var(--radius-md);
+  font-family: var(--font-texte);
+  font-weight: 600;
+  font-size: 0.95rem;
   transition: all 0.2s;
+  min-height: 48px;
 }
 
 .btn-command-start {
-  background-color: #4FAE32;
-  color: #FFFFFF;
+  background-color: var(--vert);
+  color: var(--blanc);
 }
 
 .btn-command-start:hover:not(:disabled) {
-  background-color: #3d8c28;
+  background-color: var(--vert-hover);
 }
 
 .btn-command-stop {
-  background-color: #d32f2f;
-  color: #FFFFFF;
+  background-color: var(--rouge);
+  color: var(--blanc);
 }
 
 .btn-command-stop:hover:not(:disabled) {
-  background-color: #b71c1c;
+  background-color: var(--rouge-fonce);
 }
 
 .btn-command:disabled {
@@ -67,25 +76,32 @@
 .command-feedback {
   margin-top: 1rem;
   padding: 0.75rem 1rem;
-  border-radius: 4px;
-  font-family: 'Arial Narrow', Arial, sans-serif;
-  font-size: 0.9rem;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
 }
 
 .command-feedback.success {
   background-color: #e8f5e9;
   color: #2e7d32;
+  border-left: 4px solid var(--vert);
 }
 
 .command-feedback.error {
-  background-color: #ffebee;
-  color: #d32f2f;
+  background-color: var(--rouge-fond);
+  color: var(--rouge-fonce);
+  border-left: 4px solid var(--rouge);
 }
 
 .command-hint {
   margin-top: 1rem;
-  color: #585857;
-  font-family: 'Arial Narrow', Arial, sans-serif;
-  font-size: 0.85rem;
+  color: var(--gris-texte);
+  font-size: 0.9rem;
   font-style: italic;
+  line-height: 1.5;
+}
+
+@media (min-width: 640px) {
+  .commands-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

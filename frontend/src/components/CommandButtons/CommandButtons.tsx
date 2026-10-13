@@ -20,7 +20,7 @@ export function CommandButtons({ deviceId, motorActive, fanActive }: CommandButt
 
     try {
       await commandService.send(deviceId, command);
-      setFeedback({ type: 'success', message: 'Commande envoyee' });
+      setFeedback({ type: 'success', message: 'Commande envoyée' });
       // Le feedback disparait apres 2 secondes
       setTimeout(() => setFeedback(null), 2000);
     } catch (err: unknown) {
@@ -49,14 +49,14 @@ export function CommandButtons({ deviceId, motorActive, fanActive }: CommandButt
               onClick={() => sendCommand('motor-start')}
               disabled={loading !== null || motorActive}
             >
-              {loading === 'motor-start' ? '...' : 'Demarrer'}
+              {loading === 'motor-start' ? '...' : 'Démarrer'}
             </button>
             <button
               className="btn-command btn-command-stop"
               onClick={() => sendCommand('motor-stop')}
               disabled={loading !== null || !motorActive}
             >
-              {loading === 'motor-stop' ? '...' : 'Arreter'}
+              {loading === 'motor-stop' ? '...' : 'Arrêter'}
             </button>
           </div>
         </div>
@@ -72,14 +72,14 @@ export function CommandButtons({ deviceId, motorActive, fanActive }: CommandButt
               onClick={() => sendCommand('fan-start')}
               disabled={loading !== null || fanActive}
             >
-              {loading === 'fan-start' ? '...' : 'Demarrer'}
+              {loading === 'fan-start' ? '...' : 'Démarrer'}
             </button>
             <button
               className="btn-command btn-command-stop"
               onClick={() => sendCommand('fan-stop')}
               disabled={loading !== null || !fanActive}
             >
-              {loading === 'fan-stop' ? '...' : 'Arreter'}
+              {loading === 'fan-stop' ? '...' : 'Arrêter'}
             </button>
           </div>
         </div>

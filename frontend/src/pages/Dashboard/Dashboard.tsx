@@ -40,7 +40,7 @@ export function Dashboard() {
 
         {!loading && !error && devices.length === 0 && (
           <div className="dashboard-empty">
-            <p>Aucun appareil associe</p>
+            <p>Aucun appareil associé</p>
             <p className="dashboard-empty-hint">
               Ajoutez votre premier composteur pour commencer.
             </p>

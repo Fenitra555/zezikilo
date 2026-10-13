@@ -24,7 +24,7 @@ export function Header() {
       <div className="header-right">
         <span className="header-user">{user?.fullName}</span>
         <button className="header-logout" onClick={handleLogout}>
-          Deconnexion
+          Déconnexion
         </button>
       </div>
     </header>

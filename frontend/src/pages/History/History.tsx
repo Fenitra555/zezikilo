@@ -124,7 +124,7 @@ export function History() {
           className="btn-back"
           onClick={() => navigate(`/devices/${deviceId}`)}
         >
-          &larr; Retour a l'appareil
+          &larr; Retour à l'appareil
         </button>
 
         <div className="history-header">
@@ -135,7 +135,7 @@ export function History() {
         </div>
 
         <div className="history-filters">
-          <span className="filters-label">Periode :</span>
+          <span className="filters-label">Période :</span>
           {(Object.keys(PERIOD_LABELS) as Period[]).map((p) => (
             <button
               key={p}
@@ -150,7 +150,7 @@ export function History() {
         <div className="history-info">
           {!loading && (
             <span>
-              {total} mesure{total !== 1 ? 's' : ''} sur la periode
+              {total} mesure{total !== 1 ? 's' : ''} sur la période
             </span>
           )}
         </div>
@@ -161,7 +161,7 @@ export function History() {
 
         {!loading && !error && measurements.length === 0 && (
           <div className="history-empty">
-            <p>Aucune mesure sur cette periode.</p>
+            <p>Aucune mesure sur cette période.</p>
           </div>
         )}
 
@@ -205,7 +205,7 @@ export function History() {
                   onClick={() => handlePageChange(Math.max(0, page - 1))}
                   disabled={page === 0}
                 >
-                  &larr; Precedent
+                  &larr; Précédent
                 </button>
 
                 <span className="page-info">

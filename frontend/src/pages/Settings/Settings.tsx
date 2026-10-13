@@ -119,7 +119,7 @@ export function Settings() {
       });
 
       await settingsService.update(deviceId, payload);
-      setSuccess('Parametres enregistres');
+      setSuccess('Paramètres enregistrés');
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: unknown) {
       const message =
@@ -165,20 +165,20 @@ export function Settings() {
           className="btn-back"
           onClick={() => navigate(`/devices/${deviceId}`)}
         >
-          &larr; Retour a l'appareil
+          &larr; Retour à l'appareil
         </button>
 
         <div className="settings-header">
-          <h2 className="settings-title">Parametres de regulation</h2>
+          <h2 className="settings-title">Paramètres de régulation</h2>
           <p className="settings-subtitle">
             {device?.alias || device?.serialNumber}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="settings-form">
-          {/* Temperatures critiques */}
+          {/* Températures critiques */}
           <fieldset className="settings-fieldset">
-            <legend>Temperatures critiques (°C)</legend>
+            <legend>Températures critiques (°C)</legend>
             <div className="settings-grid">
               <label>
                 <span>Max urgence</span>
@@ -242,7 +242,7 @@ export function Settings() {
                 />
               </label>
               <label>
-                <span>Duree transition (h)</span>
+                <span>Durée transition (h)</span>
                 <input
                   type="number"
                   step="1"
@@ -253,9 +253,9 @@ export function Settings() {
             </div>
           </fieldset>
 
-          {/* Humidite */}
+          {/* Humidité */}
           <fieldset className="settings-fieldset">
-            <legend>Humidite (%)</legend>
+            <legend>Humidité (%)</legend>
             <div className="settings-grid">
               <label>
                 <span>Minimum</span>
@@ -283,7 +283,7 @@ export function Settings() {
             <legend>Cadence de brassage</legend>
             <div className="settings-grid settings-grid-3col">
               <label>
-                <span>Phase 1 - Duree (min)</span>
+                <span>Phase 1 - Durée (min)</span>
                 <input
                   type="number"
                   step="1"
@@ -306,7 +306,7 @@ export function Settings() {
               </label>
 
               <label>
-                <span>Phase 2 - Duree (min)</span>
+                <span>Phase 2 - Durée (min)</span>
                 <input
                   type="number"
                   step="1"
@@ -329,7 +329,7 @@ export function Settings() {
               </label>
 
               <label>
-                <span>Phase 3 - Duree (min)</span>
+                <span>Phase 3 - Durée (min)</span>
                 <input
                   type="number"
                   step="1"

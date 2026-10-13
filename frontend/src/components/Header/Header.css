@@ -1,46 +1,75 @@
 /* src/components/Header/Header.css */
 .app-header {
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #DADADA;
-  padding: 1rem 2rem;
+  background-color: var(--blanc);
+  border-bottom: 1px solid var(--gris-clair);
+  padding: 0.75rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .header-logo {
-  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
-  color: #4FAE32;
-  font-size: 1.5rem;
+  font-family: var(--font-titre);
+  color: var(--vert);
+  font-size: 1.3rem;
   margin: 0;
+  font-weight: 800;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.75rem;
 }
 
 .header-user {
-  color: #585857;
-  font-family: 'Arial Narrow', Arial, sans-serif;
-  font-size: 0.95rem;
+  color: var(--gris-texte);
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: none;
 }
 
 .header-logout {
   background-color: transparent;
-  color: #585857;
-  border: 1px solid #DADADA;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-family: 'Arial Narrow', Arial, sans-serif;
+  color: var(--gris-texte);
+  border: 1px solid var(--gris-clair);
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-sm);
   font-size: 0.9rem;
-  cursor: pointer;
+  font-weight: 500;
   transition: all 0.2s;
+  min-height: 40px;
 }
 
 .header-logout:hover {
-  background-color: #DADADA;
-  color: #1D1D1B;
+  background-color: var(--gris-fond);
+  color: var(--noir);
+  border-color: var(--gris-moyen);
+}
+
+/* Tablette */
+@media (min-width: 640px) {
+  .app-header {
+    padding: 1rem 1.5rem;
+  }
+  .header-logo {
+    font-size: 1.5rem;
+  }
+  .header-user {
+    display: inline;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .app-header {
+    padding: 1rem 2rem;
+  }
+  .header-logo {
+    font-size: 1.6rem;
+  }
 }

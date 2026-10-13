@@ -22,7 +22,7 @@ export function Register() {
 
     // Validation côté client
     if (password.length < 8) {
-      setError('Le mot de passe doit contenir au moins 8 caracteres');
+      setError('Le mot de passe doit contenir au moins 8 caractères');
       return;
     }
 
@@ -51,7 +51,7 @@ export function Register() {
     <div className="register-container">
       <div className="register-card">
         <h1>Zezik'Ilo</h1>
-        <p className="subtitle">Creer un compte</p>
+        <p className="subtitle">Créer un compte</p>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -86,7 +86,7 @@ export function Register() {
               minLength={8}
               autoComplete="new-password"
             />
-            <small className="hint">Minimum 8 caracteres</small>
+            <small className="hint">Minimum 8 caractères</small>
           </div>
 
           <div className="form-group">
@@ -103,12 +103,12 @@ export function Register() {
           {error && <div className="error-message">{error}</div>}
 
           <button type="submit" disabled={loading}>
-            {loading ? 'Creation...' : 'Creer mon compte'}
+            {loading ? 'Création...' : 'Creer mon compte'}
           </button>
         </form>
 
         <p className="login-link">
-          Deja un compte ? <Link to="/login">Se connecter</Link>
+          Déjà un compte ? <Link to="/login">Se connecter</Link>
         </p>
       </div>
     </div>
